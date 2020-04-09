@@ -1,6 +1,7 @@
 package receipe.receipeproject.domain;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -11,15 +12,16 @@ public class Recipes {
 
     private String description;
     private Integer prepTime;
-    private Integer cookTime;
+    private Integer cockTime;
     private Integer servings;
     private String source;
     private String url;
+    @Lob
     private String directions;
     //    todo
 //    private Difficulty difficulty;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipes")
-    private Set<Ingredient> ingredients;
+    private Set<Ingredient> ingredients = new HashSet<>();
     @Lob
     private Byte[] image;
     @Enumerated(value = EnumType.STRING)
@@ -31,7 +33,7 @@ public class Recipes {
     @JoinTable(name = "recipes_category",
     joinColumns = @JoinColumn(name = "recipes_id"),
     inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Set<Category> categories;
+    private Set<Category> categories = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -57,12 +59,12 @@ public class Recipes {
         this.prepTime = prepTime;
     }
 
-    public Integer getCookTime() {
-        return cookTime;
+    public Integer getCockTime() {
+        return cockTime;
     }
 
-    public void setCookTime(Integer cookTime) {
-        this.cookTime = cookTime;
+    public void setCockTime(Integer cookTime) {
+        this.cockTime = cookTime;
     }
 
     public Integer getServings() {
@@ -111,5 +113,29 @@ public class Recipes {
 
     public void setNotes(Notes notes) {
         this.notes = notes;
+    }
+
+    public Set<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(Set<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
     }
 }

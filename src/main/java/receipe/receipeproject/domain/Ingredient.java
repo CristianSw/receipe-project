@@ -1,6 +1,7 @@
 package receipe.receipeproject.domain;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.math.BigDecimal;
 
 @Entity
@@ -15,6 +16,16 @@ public class Ingredient {
     private Recipes recipes;
    @OneToOne(fetch = FetchType.EAGER)
    private UnitOfMeasure uom;
+
+   public Ingredient(){}
+
+    public Ingredient(String description, BigDecimal amount, UnitOfMeasure uom,Recipes recipes) {
+        this.description = description;
+        this.amount = amount;
+        this.uom = uom;
+        this.recipes = recipes;
+    }
+
 
     public Long getId() {
         return id;

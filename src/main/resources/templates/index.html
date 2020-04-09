@@ -6,5 +6,28 @@
 </head>
 <body>
 <h1>Recipe Home Page : Hello friend!</h1>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Description</th>
+        <th>Prep Time</th>
+        <th>Cock Time</th>
+        <th>Difficulty</th>
+        <th>Directions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="recipes : ${recipes}">
+        <td th:text="${recipes.id}">123</td>
+        <td th:text="${recipes.description}">Some Description</td>
+        <td th:text="${recipes.prepTime}">10</td>
+        <td th:text="${recipes.cockTime}">20</td>
+        <td th:text="${recipes.difficulty}">Easy</td>
+        <td th:text="${recipes.directions}">Some Directions</td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>
