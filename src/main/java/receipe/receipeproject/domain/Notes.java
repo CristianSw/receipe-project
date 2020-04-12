@@ -1,9 +1,13 @@
 package receipe.receipeproject.domain;
 
-import receipe.receipeproject.domain.Recipes;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 
 import javax.persistence.*;
 
+@Data
+@EqualsAndHashCode(exclude = {"recipes"})
 @Entity
 public class Notes {
     @Id
@@ -13,28 +17,4 @@ public class Notes {
     private Recipes recipes;
     @Lob
     private String recipesNotes;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Recipes getRecipes() {
-        return recipes;
-    }
-
-    public void setRecipes(Recipes recipes) {
-        this.recipes = recipes;
-    }
-
-    public String getRecipesNotes() {
-        return recipesNotes;
-    }
-
-    public void setRecipesNotes(String recipesNotes) {
-        this.recipesNotes = recipesNotes;
-    }
 }

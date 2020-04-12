@@ -1,5 +1,6 @@
 package receipe.receipeproject.bootstrap;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -8,11 +9,12 @@ import receipe.receipeproject.repositories.CategoryRepository;
 import receipe.receipeproject.repositories.RecipeRepository;
 import receipe.receipeproject.repositories.UnitOfMeasureRepository;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+@Slf4j
 @Component
 public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEvent> {
     private final CategoryRepository categoryRepository;
@@ -20,19 +22,24 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
     private final UnitOfMeasureRepository unitOfMeasureRepository;
 
     public RecipeBootstrap(CategoryRepository categoryRepository, RecipeRepository recipeRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
+        log.debug("I am in Repository constructor");
         this.categoryRepository = categoryRepository;
         this.recipeRepository = recipeRepository;
         this.unitOfMeasureRepository = unitOfMeasureRepository;
     }
 
     @Override
+    @Transactional
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
+        log.debug("I am in onApplicationEvent method");
         recipeRepository.saveAll(getRecipes());
     }
 
     private List<Recipes> getRecipes() {
+        log.debug("Enter in getRecipes method");
         List<Recipes> recipes = new ArrayList<>(2);
 //        Get UOM's
+        log.debug("Start verifying UOM's");
         Optional<UnitOfMeasure> eachUomOptional = unitOfMeasureRepository.findByDescription("Each");
         if (!eachUomOptional.isPresent()) {
             throw new RuntimeException("Expected UOM not found");
@@ -61,16 +68,19 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         if (!ounceUomOptional.isPresent()) {
             throw new RuntimeException("Expected UOM not found");
         }
+        log.debug("UOM's verification finished successfully ");
 
         //get optionals
-
+        log.debug("Getting optionals for UOM's");
         UnitOfMeasure each = eachUomOptional.get();
         UnitOfMeasure tablespoon = tableSpoonUomOptional.get();
         UnitOfMeasure teaspoon = teaSpoonUomOptional.get();
         UnitOfMeasure dash = dashUomOptional.get();
         UnitOfMeasure pint = pintUomOptional.get();
         UnitOfMeasure cup = cupUomOptional.get();
+        log.debug("Optionals for UOM's was get");
         //get categories
+        log.debug("Start verifying categories");
         Optional<Category> americanCategoryOptional = categoryRepository.findByDescription("American");
         if (!americanCategoryOptional.isPresent()) {
             throw new RuntimeException("An expected category not found");
@@ -91,20 +101,25 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         if (!fastFoodCategoryOptional.isPresent()) {
             throw new RuntimeException("An expected category not found");
         }
-
+        log.debug("Verifying categories finished successfully");
+//        Get Optionals for category
+        log.debug("Getting optionals for categories");
         Category american = americanCategoryOptional.get();
         Category italian = italianCategoryOptional.get();
         Category mexican = mexicanCategoryOptional.get();
         Category moldavian = moldavianCategoryOptional.get();
         Category fastFood = fastFoodCategoryOptional.get();
+        log.debug("Optionals for categories was get");
 
 //        Yummy Guac
-        Recipes guacRecipe = new Recipes();
-        guacRecipe.setDescription("Perfect Guacamole");
-        guacRecipe.setPrepTime(10);
-        guacRecipe.setCockTime(0);
-        guacRecipe.setDifficulty(Difficulty.EASY);
-        guacRecipe.setDirections("1 Cut the avocado, remove flesh: Cut the avocados in half. Remove the pit. Score the inside of the avocado with a blunt knife and scoop out the flesh with a spoon." +
+
+        log.debug("Start creating guac recipe");
+        Recipes guacRecipes = new Recipes();
+        guacRecipes.setDescription("Perfect Guacamole");
+        guacRecipes.setPrepTime(10);
+        guacRecipes.setCockTime(0);
+        guacRecipes.setDifficulty(Difficulty.EASY);
+        guacRecipes.setDirections("1 Cut the avocado, remove flesh: Cut the avocados in half. Remove the pit. Score the inside of the avocado with a blunt knife and scoop out the flesh with a spoon." +
                 "\n" +
                 "2 Mash with a fork: Using a fork, roughly mash the avocado. (Don't overdo it! The guacamole should be a little chunky.)" +
                 "\n" +
@@ -120,32 +135,39 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
                 "\n" +
                 "\n" +
                 "Read More on https://www.simplyrecipes.com/recipes/perfect_guacamole/");
-
+        log.debug("Start creting Notes for guac");
         Notes guacNotes = new Notes();
         guacNotes.setRecipesNotes("For a very quick guacamole just take a 1/4 cup of salsa and mix it in with your mashed avocados." +
                 "\n" +
                 "To extend a limited supply of avocados, add either sour cream or cottage cheese to your guacamole dip. Purists may be horrified, but so what? It tastes great." +
                 "\n" +
                 "he simplest version of guacamole is just mashed avocados with salt. Don’t let the lack of availability of other ingredients stop you from making guacamole.");
-        guacNotes.setRecipes(guacRecipe);
-        guacRecipe.setNotes(guacNotes);
-        guacRecipe.getIngredients().add(new Ingredient("ripe avocados", new BigDecimal(2), each, guacRecipe));
-        guacRecipe.getIngredients().add(new Ingredient("Kosher salt", new BigDecimal(".5"), teaspoon, guacRecipe));
-        guacRecipe.getIngredients().add(new Ingredient("fresh lime juice or lemon juice", new BigDecimal(1), tablespoon, guacRecipe));
-        guacRecipe.getIngredients().add(new Ingredient("minced red onion or thinly sliced green onion", new BigDecimal(2), tablespoon, guacRecipe));
-        guacRecipe.getIngredients().add(new Ingredient("serrano chiles, stems and seeds removed, minced", new BigDecimal(2), each, guacRecipe));
-        guacRecipe.getIngredients().add(new Ingredient("cilantro (leaves and tender stems), finely chopped", new BigDecimal(2), tablespoon, guacRecipe));
-        guacRecipe.getIngredients().add(new Ingredient("fresh grated black pepper", new BigDecimal(1), dash, guacRecipe));
-        guacRecipe.getIngredients().add(new Ingredient("ripe tomato, seeds and pulp removed, chopped", new BigDecimal(2), each, guacRecipe));
-
-        guacRecipe.getCategories().add(american);
-        guacRecipe.getCategories().add(italian);
-        guacRecipe.getCategories().add(mexican);
-        guacRecipe.getCategories().add(moldavian);
-
-        recipes.add(guacRecipe);
+        guacNotes.setRecipes(guacRecipes);
+        log.debug("Assign guac note to guac recipe finished successfully");
+        guacRecipes.setNotes(guacNotes);
+        log.debug("Assign guac recipe to guac notes finished successfully");
+        log.debug("Start adding guac Ingredients");
+        guacRecipes.getIngredients().add(new Ingredient("ripe avocados", new BigDecimal(2), each, guacRecipes));
+        guacRecipes.getIngredients().add(new Ingredient("Kosher salt", new BigDecimal(".5"), teaspoon, guacRecipes));
+        guacRecipes.getIngredients().add(new Ingredient("fresh lime juice or lemon juice", new BigDecimal(1), tablespoon, guacRecipes));
+        guacRecipes.getIngredients().add(new Ingredient("minced red onion or thinly sliced green onion", new BigDecimal(2), tablespoon, guacRecipes));
+        guacRecipes.getIngredients().add(new Ingredient("serrano chiles, stems and seeds removed, minced", new BigDecimal(2), each, guacRecipes));
+        guacRecipes.getIngredients().add(new Ingredient("cilantro (leaves and tender stems), finely chopped", new BigDecimal(2), tablespoon, guacRecipes));
+        guacRecipes.getIngredients().add(new Ingredient("fresh grated black pepper", new BigDecimal(1), dash, guacRecipes));
+        guacRecipes.getIngredients().add(new Ingredient("ripe tomato, seeds and pulp removed, chopped", new BigDecimal(2), each, guacRecipes));
+        log.debug("Ingredients was added successfully");
+        log.debug("Start assigning categories for guac");
+        guacRecipes.getCategories().add(american);
+        guacRecipes.getCategories().add(italian);
+        guacRecipes.getCategories().add(mexican);
+        guacRecipes.getCategories().add(moldavian);
+        log.debug("Categories for guac was assigned successfully");
+        log.debug("Try to save guac recipe to recipes list");
+        recipes.add(guacRecipes);
+        log.debug("Guac recipe successfully saved to recipes list");
 
 //        chicken grill
+        log.debug("Start creating chickenGrill recipe");
         Recipes chickenGrill = new Recipes();
         chickenGrill.setDescription("Spicy Grilled Chicken Tacos");
         chickenGrill.setPrepTime(20);
@@ -167,6 +189,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
                 "\n" +
                 "\n" +
                 "Read more on https://www.simplyrecipes.com/recipes/spicy_grilled_chicken_tacos/");
+        log.debug("Creating Notes for chickenGrill");
         Notes grillNotes = new Notes();
         grillNotes.setRecipesNotes("The ancho chiles I use in the marinade are named for their wide shape. They are large, have a deep reddish brown color when dried, and are mild in flavor with just a hint of heat. You can find ancho chile powder at any markets that sell Mexican ingredients, or online.\n" +
                 "\n" +
@@ -175,8 +198,12 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
                 "Everyone can grab a warm tortilla from the pile and make their own tacos just they way they like them.\n" +
                 "\n" +
                 "You could also easily double or even triple this recipe for a larger party. A taco and a cold beer on a warm day? Now that’s living!");
+
         grillNotes.setRecipes(chickenGrill);
+        log.debug("Assign to grillNotes chickenGrill recipe was successful");
         chickenGrill.setNotes(grillNotes);
+        log.debug("Assigning to chickenGrill recipe grillNotes was successful");
+        log.debug("Start adding ingredients to chickenGrill recipe");
         chickenGrill.getIngredients().add(new Ingredient("ancho chili powder", new BigDecimal(2), tablespoon, chickenGrill));
         chickenGrill.getIngredients().add(new Ingredient("dried oregano", new BigDecimal(1), teaspoon, chickenGrill));
         chickenGrill.getIngredients().add(new Ingredient("dried cumin", new BigDecimal(1), teaspoon, chickenGrill));
@@ -196,13 +223,16 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         chickenGrill.getIngredients().add(new Ingredient("Roughly chopped cilantro", new BigDecimal(1), each, chickenGrill));
         chickenGrill.getIngredients().add(new Ingredient("sour cream thinned with 1/4 cup milk", new BigDecimal(2), cup, chickenGrill));
         chickenGrill.getIngredients().add(new Ingredient("lime, cut into wedges", new BigDecimal(1), each, chickenGrill));
-
+        log.debug("Ingredients was added successfully to chickenGrill recipe");
+        log.debug("Start assigning categories to chickenGrill recipe");
         chickenGrill.getCategories().add(american);
         chickenGrill.getCategories().add(italian);
         chickenGrill.getCategories().add(mexican);
         chickenGrill.getCategories().add(moldavian);
-
+        log.debug("Categories was assigned successfully");
+        log.debug("Try to save chickenGrill recipe to recipes list");
         recipes.add(chickenGrill);
+        log.debug("ChickenGrill recipe was successfully saved to recipes list");
 
         return recipes;
     }
