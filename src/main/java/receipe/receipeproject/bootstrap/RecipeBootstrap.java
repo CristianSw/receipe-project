@@ -162,6 +162,12 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         guacRecipes.getCategories().add(mexican);
         guacRecipes.getCategories().add(moldavian);
         log.debug("Categories for guac was assigned successfully");
+        log.debug("Try to set url");
+        guacRecipes.setUrl("https://www.simplyrecipes.com/recipes/perfect_guacamole/");
+        log.debug("Try to set servings");
+        guacRecipes.setServings(4);
+        log.debug("Try to set source");
+        guacRecipes.setSource("Simply Recipes");
         log.debug("Try to save guac recipe to recipes list");
         recipes.add(guacRecipes);
         log.debug("Guac recipe successfully saved to recipes list");
@@ -230,6 +236,12 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         chickenGrill.getCategories().add(mexican);
         chickenGrill.getCategories().add(moldavian);
         log.debug("Categories was assigned successfully");
+        log.debug("Try to set url");
+        guacRecipes.setUrl("https://www.simplyrecipes.com/recipes/spicy_grilled_chicken_tacos/");
+        log.debug("Try to set servings");
+        guacRecipes.setServings(4);
+        log.debug("Try to set source");
+        guacRecipes.setSource("Simply Recipes");
         log.debug("Try to save chickenGrill recipe to recipes list");
         recipes.add(chickenGrill);
         log.debug("ChickenGrill recipe was successfully saved to recipes list");

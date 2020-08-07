@@ -21,8 +21,7 @@ public class Recipes {
     private String url;
     @Lob
     private String directions;
-    //    todo
-//    private Difficulty difficulty;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipes")
     private Set<Ingredient> ingredients = new HashSet<>();
     @Lob

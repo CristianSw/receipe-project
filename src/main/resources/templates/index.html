@@ -3,31 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <title>Recipe Home</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"
+          th:href="@{/webjars/bootstrap/4.4.1/css/bootstrap.min.css}">
+    <script src="/webjars/jquery/3.0.0/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"
+            th:href="@{/webjars/bootstrap/4.4.1/js/bootstrap.min.js}"></script>
 </head>
 <body>
-<h1>Recipe Home Page : Hello friend!</h1>
-
-<table border="1">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Description</th>
-        <th>Prep Time</th>
-        <th>Cock Time</th>
-        <th>Difficulty</th>
-        <th>Directions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="recipes : ${recipes}">
-        <td th:text="${recipes.id}">123</td>
-        <td th:text="${recipes.description}">Some Description</td>
-        <td th:text="${recipes.prepTime}">10</td>
-        <td th:text="${recipes.cockTime}">20</td>
-        <td th:text="${recipes.difficulty}">Easy</td>
-        <td th:text="${recipes.directions}">Some Directions</td>
-    </tr>
-    </tbody>
-</table>
+<div class="container-fluid" style="margin-top: 20px">
+    <div class="row justify-content-center  " >
+        <div class="col-md-6 md-offset-3">
+                <div class="card card-primary">
+                <div class="card-header bg-primary text-light">
+                    <h1 class="card-title">My Recipes !</h1>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive" th:if="${not #lists.isEmpty(recipes)}">
+                        <table class="table table-hover">
+                            <thead class="thead-inverse">
+                            <tr>
+                                <th>ID</th>
+                                <th>Description</th>
+                                <th>View</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:remove="all">
+                                <td th:text="${recipes.id}">1</td>
+                                <td th:text="${recipes.description}">Some Description1</td>
+                            </tr>
+                            <tr th:remove="all">
+                                <td th:text="${recipes.id}">2</td>
+                                <td th:text="${recipes.description}">Some Description2</td>
+                            </tr>
+                            <tr th:each="recipes : ${recipes}">
+                                <!--/*@thymesVar id="recipes" type = "receipe.receipeproject.domain.Recipes"*/-->
+                                <td th:text="${recipes.id}">123</td>
+                                <td th:text="${recipes.description}">Some Description</td>
+                                <td><a href="#" th:href="@{'/recipe/show/' + ${recipes.id}}">View</a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
