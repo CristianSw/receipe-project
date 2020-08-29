@@ -17,12 +17,14 @@ class CategoryCommandToCategoryTest {
     void setUp() {
         converter = new CategoryCommandToCategory();
     }
+
     @Test
-    void testNullObject(){
+    void testNullObject() {
         assertNull(converter.convert(null));
     }
+
     @Test
-    void emptyObject(){
+    void emptyObject() {
         assertNotNull(converter.convert(new CategoryCommand()));
     }
 
@@ -37,7 +39,7 @@ class CategoryCommandToCategoryTest {
         Category category = converter.convert(categoryCommand);
 
         //then
-        assertEquals(categoryCommand.getId(),ID_VALUE);
-        assertEquals(categoryCommand.getDescription(),DESCRIPTION);
+        assertEquals(categoryCommand.getId(), ID_VALUE);
+        assertEquals(categoryCommand.getDescription(), DESCRIPTION);
     }
 }

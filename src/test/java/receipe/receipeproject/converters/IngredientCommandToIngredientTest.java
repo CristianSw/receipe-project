@@ -26,12 +26,12 @@ class IngredientCommandToIngredientTest {
     }
 
     @Test
-    void testNullObject(){
+    void testNullObject() {
         assertNull(converter.convert(null));
     }
 
     @Test
-    void emptyObject(){
+    void emptyObject() {
         assertNotNull(converter.convert(new IngredientCommand()));
     }
 
@@ -52,11 +52,12 @@ class IngredientCommandToIngredientTest {
         //then
         assertNotNull(ingredientCommand);
         assertNotNull(ingredientCommand.getUnitOfMeasure());
-        assertEquals(ingredientCommand.getId(),ID_VALUE);
-        assertEquals(ingredientCommand.getDescription(),DESCRIPTION);
-        assertEquals(ingredientCommand.getAmount(),AMOUNT);
-        assertEquals(ingredientCommand.getUnitOfMeasure().getId(),UOM_ID);
+        assertEquals(ingredientCommand.getId(), ID_VALUE);
+        assertEquals(ingredientCommand.getDescription(), DESCRIPTION);
+        assertEquals(ingredientCommand.getAmount(), AMOUNT);
+        assertEquals(ingredientCommand.getUnitOfMeasure().getId(), UOM_ID);
     }
+
     @Test
     void convertWithNullUOM() {
         //given
@@ -71,8 +72,8 @@ class IngredientCommandToIngredientTest {
         //then
         assertNotNull(ingredientCommand);
         assertNull(ingredientCommand.getUnitOfMeasure());
-        assertEquals(ingredientCommand.getId(),ID_VALUE);
-        assertEquals(ingredientCommand.getDescription(),DESCRIPTION);
-        assertEquals(ingredientCommand.getAmount(),AMOUNT);
+        assertEquals(ingredientCommand.getId(), ID_VALUE);
+        assertEquals(ingredientCommand.getDescription(), DESCRIPTION);
+        assertEquals(ingredientCommand.getAmount(), AMOUNT);
     }
 }
