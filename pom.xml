@@ -67,7 +67,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-        spr    <scope>test</scope>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

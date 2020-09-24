@@ -27,6 +27,9 @@ class RecipeServiceImplTest {
     @Mock
     RecipeCommandToRecipe recipeCommandToRecipe;
 
+    private static final String DESCRIPTION = "Description";
+    private static final Long ID = 1L;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -57,10 +60,5 @@ class RecipeServiceImplTest {
         Set<Recipes> recipes = recipeService.getRecipes();
         assertEquals(recipes.size(), 1);
         verify(recipeRepository, times(1)).findAll();
-    }
-
-    @Test
-    void saveRecipe() {
-        //todo
     }
 }
